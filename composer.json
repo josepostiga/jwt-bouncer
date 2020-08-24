@@ -15,9 +15,12 @@
         "sort-packages": true
     },
     "require": {
-        "php": "^7.4"
+        "php": "^7.4",
+        "lcobucci/jwt": "^3.3"
     },
     "require-dev": {
+        "orchestra/testbench": "^5.4",
+        "php-coveralls/php-coveralls": "^2.2",
         "roave/security-advisories": "dev-master"
     },
     "autoload": {
