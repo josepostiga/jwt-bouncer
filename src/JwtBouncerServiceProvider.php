@@ -31,12 +31,11 @@ class JwtBouncerServiceProvider extends ServiceProvider
 
     private function mergeAuthGuardsConfig(): void
     {
-        $currentAuthGuards = $this->app['config']->get('auth.guards');
-        $jwtAuthGuard = $this->app['config']->get('jwt-bouncer.guards');
+        $config = $this->app['config'];
 
-        $this->app['config']->set(
+        $config->set(
             'auth.guards',
-            array_merge($currentAuthGuards, $jwtAuthGuard)
+            array_merge($config->get('auth.guards'), $config->get('jwt-bouncer.guards'))
         );
     }
 }
