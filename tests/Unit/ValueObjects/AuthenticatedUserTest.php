@@ -46,6 +46,14 @@ class AuthenticatedUserTest extends TestCase
         self::assertEquals('sub', $user->getAuthIdentifierName());
     }
 
+    /** @test */
+    public function it_gets_correct_auth_identifier(): void
+    {
+        $user = new AuthenticatedUser($this->jwt);
+
+        self::assertEquals(1, $user->getAuthIdentifier());
+    }
+
     /**
      * @test
      *

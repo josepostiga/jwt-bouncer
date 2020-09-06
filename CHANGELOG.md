@@ -28,6 +28,12 @@ All notable changes to this repository will be documented in this file.
 
 - N/A
 
+## 1.0.3 - 2020-09-06
+
+### Removed
+
+- No need to worry about class property access from the outside.
+
 ## 1.0.2 - 2020-09-06
 
 ### Added

@@ -47,10 +47,6 @@ class AuthenticatedUser implements Authenticatable
 
     public function __get($claim)
     {
-        if (property_exists($this, $claim)) {
-            return $this->$claim;
-        }
-
         return $this->token->getClaim($claim);
     }
 }

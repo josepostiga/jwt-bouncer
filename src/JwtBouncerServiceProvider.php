@@ -43,7 +43,7 @@ class JwtBouncerServiceProvider extends ServiceProvider
 
     private function publishesAssets(): void
     {
-        if (strpos('Lumen', $this->app->version()) === 0) {
+        if (strpos('Lumen', $this->app->version()) === false) {
             return;
         }
 
