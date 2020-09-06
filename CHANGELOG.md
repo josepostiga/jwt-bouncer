@@ -27,3 +27,9 @@ All notable changes to this repository will be documented in this file.
 ### Security
 
 - N/A
+
+## 1.0.0 - 2020-09-06
+
+### Added
+
+- Added JWT guard.
