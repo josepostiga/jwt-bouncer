@@ -11,7 +11,21 @@ class JwtBouncerServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
-        $this->mergeConfigFrom(__DIR__ . '/../config/jwt-bouncer.php', 'jwt-bouncer');
+        $this->handleConfigs();
+
+        $this->extendAuthGuards();
+
+        $this->publishesAssets();
+    }
+
+    private function extendAuthGuards(): void
+    {
+        $config = $this->app['config'];
+
+        $config->set(
+            'auth.guards',
+            array_merge($config->get('auth.guards'), $config->get('jwt-bouncer.guards'))
+        );
 
         $this->app['auth']->extend(
             config('jwt-bouncer.guards.jwt.driver'),
@@ -25,17 +39,24 @@ class JwtBouncerServiceProvider extends ServiceProvider
                 return new JwtGuard($jwt);
             }
         );
-
-        $this->mergeAuthGuardsConfig();
     }
 
-    private function mergeAuthGuardsConfig(): void
+    private function handleConfigs(): void
     {
+        $this->mergeConfigFrom(__DIR__ . '/../config/jwt-bouncer.php', 'jwt-bouncer');
+
         $config = $this->app['config'];
 
         $config->set(
             'auth.guards',
             array_merge($config->get('auth.guards'), $config->get('jwt-bouncer.guards'))
         );
+    }
+
+    private function publishesAssets(): void
+    {
+        $this->publishes([
+            __DIR__.'/../config/jwt-bouncer.php' => config_path('jwt-bouncer.php'),
+        ], 'config');
     }
 }
