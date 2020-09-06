@@ -3,18 +3,12 @@
 namespace JosePostiga\JwtBouncer;
 
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
 use JosePostiga\JwtBouncer\Guards\JwtGuard;
-use JosePostiga\JwtBouncer\Macros\RequestJwtMacro;
+use Lcobucci\JWT\Parser;
 
 class JwtBouncerServiceProvider extends ServiceProvider
 {
-    public function register(): void
-    {
-        Request::macro('jwt', new RequestJwtMacro());
-    }
-
     public function boot(): void
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/jwt-bouncer.php', 'jwt-bouncer');
@@ -22,7 +16,13 @@ class JwtBouncerServiceProvider extends ServiceProvider
         $this->app['auth']->extend(
             config('jwt-bouncer.guards.jwt.driver'),
             static function (Application $app, $name, array $config) {
-                return new JwtGuard($app['request']->jwt());
+                try {
+                    $jwt = (new Parser())->parse($app['request']->bearerToken());
+                } catch (\Exception $exception) {
+                    $jwt = null;
+                }
+
+                return new JwtGuard($jwt);
             }
         );
 
