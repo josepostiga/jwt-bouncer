@@ -2,7 +2,7 @@
 
 namespace JosePostiga\JwtBouncer;
 
-use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\ServiceProvider;
 use JosePostiga\JwtBouncer\Guards\JwtGuard;
 use Lcobucci\JWT\Parser;
@@ -29,7 +29,7 @@ class JwtBouncerServiceProvider extends ServiceProvider
 
         $this->app['auth']->extend(
             $config->get('jwt-bouncer.guards.jwt.driver'),
-            static function (Application $app, $name, array $config) {
+            static function (Container $app, $name, array $config) {
                 try {
                     $jwt = (new Parser())->parse($app['request']->bearerToken());
                 } catch (\Exception $exception) {
@@ -43,12 +43,8 @@ class JwtBouncerServiceProvider extends ServiceProvider
 
     private function publishesAssets(): void
     {
-        if (strpos('Lumen', $this->app->version()) === false) {
-            return;
-        }
-
         $this->publishes([
-            __DIR__.'/../config/jwt-bouncer.php' => config_path('jwt-bouncer.php'),
+            __DIR__.'/../config/jwt-bouncer.php' => $this->app->configPath('jwt-bouncer.php'),
         ], 'config');
     }
 }

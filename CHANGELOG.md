@@ -28,6 +28,16 @@ All notable changes to this repository will be documented in this file.
 
 - N/A
 
+## 1.0.4 - 2020-09-06
+
+### Added
+
+- Assets publishing for Lumen applications.
+
+### Fixed
+
+- Type hinted Auth::extend() call with appropriate contract.
+
 ## 1.0.3 - 2020-09-06
 
 ### Removed
