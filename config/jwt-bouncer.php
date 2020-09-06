@@ -6,4 +6,5 @@ return [
             'driver' => 'jwt',
         ],
     ],
+    'scopes' => ['*'],
 ];

@@ -22,6 +22,7 @@ class JwtGuardTest extends TestCase
 
         $this->jwt = (new Builder())
             ->relatedTo(1)
+            ->withClaim('scopes', ['*'])
             ->getToken();
     }
 
@@ -36,6 +37,41 @@ class JwtGuardTest extends TestCase
     public function authenticated_requests_to_protected_routes_are_processed(): void
     {
         $this->withToken($this->jwt)
+            ->getJson('_test/jwt')
+            ->assertOk();
+    }
+
+    /** @test */
+    public function it_authorizes_requests_if_required_scope_is_the_all_wildcard(): void
+    {
+        $this->app['config']->set('jwt-bouncer.scopes', ['*']);
+
+        $this->withToken($this->jwt)
+            ->getJson('_test/jwt')
+            ->assertOk();
+    }
+
+    /** @test */
+    public function it_rejects_requests_if_required_scopes_are_not_declared_in_the_jwt(): void
+    {
+        $this->app['config']->set('jwt-bouncer.scopes', ['another-unrelated-scope', 'specific-scope']);
+
+        $this->withToken($this->jwt)
+            ->getJson('_test/jwt')
+            ->assertUnauthorized();
+    }
+
+    /** @test */
+    public function it_authorizes_requests_if_required_scopes_are_declared_in_the_jwt(): void
+    {
+        $this->app['config']->set('jwt-bouncer.scopes', ['specific-scope']);
+
+        $jwtWithScopes = (new Builder())
+            ->relatedTo(1)
+            ->withClaim('scopes', ['another-unrelated-scope', 'specific-scope'])
+            ->getToken();
+
+        $this->withToken($jwtWithScopes)
             ->getJson('_test/jwt')
             ->assertOk();
     }
