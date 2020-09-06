@@ -6,5 +6,5 @@ return [
             'driver' => 'jwt',
         ],
     ],
-    'scopes' => ['*'],
+    'scopes' => env('JWT_SCOPES', ['*']),
 ];

@@ -28,6 +28,16 @@ All notable changes to this repository will be documented in this file.
 
 - N/A
 
+## 1.0.2 - 2020-09-06
+
+### Added
+
+- Added env variables to config file.
+
+### Removed
+
+- Remove assets publishing for Lumen applications.
+
 ## 1.0.1 - 2020-09-06
 
 ### Fix

@@ -11,7 +11,7 @@ class JwtBouncerServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
-        $this->handleConfigs();
+        $this->mergeConfigFrom(__DIR__ . '/../config/jwt-bouncer.php', 'jwt-bouncer');
 
         $this->extendAuthGuards();
 
@@ -24,11 +24,11 @@ class JwtBouncerServiceProvider extends ServiceProvider
 
         $config->set(
             'auth.guards',
-            array_merge($config->get('auth.guards'), $config->get('jwt-bouncer.guards'))
+            array_merge($config->get('auth.guards', []), $config->get('jwt-bouncer.guards'))
         );
 
         $this->app['auth']->extend(
-            config('jwt-bouncer.guards.jwt.driver'),
+            $config->get('jwt-bouncer.guards.jwt.driver'),
             static function (Application $app, $name, array $config) {
                 try {
                     $jwt = (new Parser())->parse($app['request']->bearerToken());
@@ -41,20 +41,12 @@ class JwtBouncerServiceProvider extends ServiceProvider
         );
     }
 
-    private function handleConfigs(): void
-    {
-        $this->mergeConfigFrom(__DIR__ . '/../config/jwt-bouncer.php', 'jwt-bouncer');
-
-        $config = $this->app['config'];
-
-        $config->set(
-            'auth.guards',
-            array_merge($config->get('auth.guards') ?? [], $config->get('jwt-bouncer.guards'))
-        );
-    }
-
     private function publishesAssets(): void
     {
+        if (strpos('Lumen', $this->app->version()) === 0) {
+            return;
+        }
+
         $this->publishes([
             __DIR__.'/../config/jwt-bouncer.php' => config_path('jwt-bouncer.php'),
         ], 'config');
