@@ -1,4 +1,4 @@
-# A verification package for your JWT authenticated requests.
+# A JWT authorization guard for your Laravel/Lumen apps.
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/josepostiga/jwt-bouncer.svg?style=flat-square)](https://packagist.org/packages/josepostiga/jwt-bouncer)
 ![Run tests](https://github.com/josepostiga/jwt-bouncer/workflows/Run%20tests/badge.svg)
