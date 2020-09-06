@@ -13,9 +13,27 @@ You can install the package via composer:
 composer require josepostiga/jwt-bouncer
 ```
 
+If you're using a recent Laravel installation, this package is automatically discovered and wired by the framework. 
+
+On Lumen application, we need to manually add the `JosePostiga\JwtBouncer\JwtServiceProvider`.
+
 ## Usage
 
+### The JWT auth guard
 
+This package adds a `jwt` api guard to the framework's configuration. You can either explicitly select this guard on a per-route basis or change the default api guard driver to `jwt`, on you `config/auth.php` config file.
+
+### JWT Scopes
+
+This package will validate the `scopes` claim on an incoming request's JWT, and check if the configured scopes are contained in that claim. If not, or if the claim isn't present, the request will be immediately rejected with a `401 Unauthorized` error status code. The same rejection will also happen if the JWT can't be correctly decoded.
+
+### Configuring the default behavior
+
+We can publish the configuration file for the package by running `php artisan vendor:publish --tag=config`. A new `jwt-bouncer.php` config file will be available on the framework's `config` folder. Inside that file, we'll find two main configuration options: `guards` and `scopes`.
+
+The `guards` option contains the necessary structure to be merged to the default `guards` keys on `config/auth.php`, which contains the authentication guards that the framework can use. If we need to rename the driver's key the package should reference to, this is where we'd do it.
+
+The `scopes` key contains an array of pre-defined scopes the guard will be validating on every request's decoded JWT. We can add as many as necessary. **Tip:** If we want to accept all scopes, we'd add the `*` scope, here, which means that all scopes are accepted.
 
 ### Testing
 
