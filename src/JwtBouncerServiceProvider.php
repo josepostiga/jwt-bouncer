@@ -49,7 +49,7 @@ class JwtBouncerServiceProvider extends ServiceProvider
 
         $config->set(
             'auth.guards',
-            array_merge($config->get('auth.guards'), $config->get('jwt-bouncer.guards'))
+            array_merge($config->get('auth.guards') ?? [], $config->get('jwt-bouncer.guards'))
         );
     }
 
