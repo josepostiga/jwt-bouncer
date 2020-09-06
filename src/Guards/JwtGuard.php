@@ -19,7 +19,7 @@ class JwtGuard implements Guard
     public function __construct(?Token $jwt)
     {
         $this->jwt = $jwt;
-        $this->scopes = config('jwt-bouncer.scopes') ?? ['*'];
+        $this->scopes = config('jwt-bouncer.scopes');
     }
 
     public function user(): ?Authenticatable

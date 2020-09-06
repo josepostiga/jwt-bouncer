@@ -28,6 +28,12 @@ All notable changes to this repository will be documented in this file.
 
 - N/A
 
+## 1.0.5 - 2020-09-06
+
+### Added
+
+- Scopes definition through env variable.
+
 ## 1.0.4 - 2020-09-06
 
 ### Added

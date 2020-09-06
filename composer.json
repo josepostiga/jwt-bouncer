@@ -1,13 +1,13 @@
 {
     "name": "josepostiga/jwt-bouncer",
-    "description": "A verification package for your JWT authenticated requests.",
-    "keywords": ["php", "package", "laravel", "jwt-bouncer", "jwt"],
+    "description": "A JWT authorization guard for your Laravel/Lumen apps.",
+    "keywords": ["php", "package", "laravel", "lumen", "jwt-bouncer", "jwt", "authorization"],
     "homepage": "https://github.com/josepostiga/jwt-bouncer",
     "license": "MIT",
     "authors": [
         {
             "name": "José Postiga",
-            "email": "me@josepostiga.com",
+            "email": "iamjosepostiga@gmail.com",
             "homepage": "https://josepostiga.com"
         }
     ],
