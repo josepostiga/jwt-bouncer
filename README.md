@@ -41,6 +41,14 @@ If we're using Lumen, then things get a little more tricky. We need to add a `JW
 
 After executing the configuration steps, we can call the `auth:jwt` middleware on any route, or route group, to use this package's guard.
 
+### The `Authenticatable` user instance
+
+On a general Laravel application, we have access to the authenticated user instance via the `Auth::user()` or `request->user()`. This instance is, generally speaking, an instance of an Eloquent model or, in some cases, a resource from a users-like database table.
+
+When using this package's JWT guard, we'll also have access to the authenticated user, but it won't be any of the types described before. Instead, it'll be an instance of the `AuthenticatedUser` value object. This class implements the `Authenticatable` interface, but its source of data is the JWT itself.
+
+This means that calling `Auth::user()->id()` will return the value of the JWT's `sub` claim. If we want to access any other claim in the JWT, we only need to reference it by its key name, so if we have a `name` claim, we can access it with `Auth::user()->name`. All calls to property access will be routed to the JWT's claims.
+
 ### Testing
 
 This project is fully tested. We have an [automatic pipeline](https://github.com/josepostiga/jwt-bouncer/actions) and an [automatic code quality analysis](https://coveralls.io/github/josepostiga/jwt-bouncer) tool set up to continuously test and assert the quality of all code published in this repository, but you can execute the test suite yourself by running the following command:
