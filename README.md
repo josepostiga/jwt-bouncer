@@ -27,13 +27,19 @@ This package adds a `jwt` api guard to the framework's configuration. You can ei
 
 This package will validate the `scopes` claim on an incoming request's JWT, and check if the configured scopes are contained in that claim. If not, or if the claim isn't present, the request will be immediately rejected with a `401 Unauthorized` error status code. The same rejection will also happen if the JWT can't be correctly decoded.
 
-### Configuring the default behavior
+### Configuration
 
-We can publish the configuration file for the package by running `php artisan vendor:publish --tag=config`. A new `jwt-bouncer.php` config file will be available on the framework's `config` folder. Inside that file, we'll find two main configuration options: `guards` and `scopes`.
+If we're using Laravel, we can publish the configuration file for the package by running `php artisan vendor:publish --tag=config`. A new `jwt-bouncer.php` config file will be available on the framework's `config` folder. Inside that file, we'll find two main configuration options: `guards` and `scopes`.
 
-The `guards` option contains the necessary structure to be merged to the default `guards` keys on `config/auth.php`, which contains the authentication guards that the framework can use. If we need to rename the driver's key the package should reference to, this is where we'd do it.
+* The `guards` option contains the necessary structure to be merged to the default `guards` keys on `config/auth.php`, which contains the authentication guards that the framework can use. If we need to rename the driver's key the package should reference to, this is where we'd do it.
 
-The `scopes` key contains an array of pre-defined scopes the guard will be validating on every request's decoded JWT. We can add as many as necessary. **Tip:** If we want to accept all scopes, we'd add the `*` scope, here, which means that all scopes are accepted.
+* The `scopes` key contains an array of pre-defined scopes the guard will be validating on every request's decoded JWT. We can add as many as necessary. **Tip:** If we want to accept all scopes, we'd add the `*` scope, here, which means that all scopes are accepted.
+
+If we're using Lumen, then things get a little more tricky. We need to add a `JWT_SCOPES` key on the `.env` file, where we defined all the scopes we accept separated by a comma. We also need to add the auth configuration file load call in the `bootstrap/app.php` file, by adding `$app->configure('app')` on the configuration files load section, there.
+
+### Protecting routes
+
+After executing the configuration steps, we can call the `auth:jwt` middleware on any route, or route group, to use this package's guard.
 
 ### Testing
 
