@@ -35,7 +35,7 @@ If we're using Laravel, we can publish the configuration file for the package by
 
 * The `scopes` key contains an array of pre-defined scopes the guard will be validating on every request's decoded JWT. We can add as many as necessary. **Tip:** If we want to accept all scopes, we'd add the `*` scope, here, which means that all scopes are accepted.
 
-If we're using Lumen, then things get a little more tricky. We need to add a `JWT_SCOPES` key on the `.env` file, where we defined all the scopes we accept separated by a comma. We also need to add the auth configuration file load call in the `bootstrap/app.php` file, by adding `$app->configure('app')` on the configuration files load section, there.
+If we're using Lumen, then things get a little more tricky. We need to add a `JWT_SCOPES` key on the `.env` file, where we defined all the scopes we accept separated by a comma. We also need to add the auth configuration file load call in the `bootstrap/app.php` file, by adding `$app->configure('auth')` on the configuration files load section, there.
 
 ### Protecting routes
 
