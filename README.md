@@ -90,6 +90,8 @@ class AuthServiceProvider extends ServiceProvider
 
 ```
 
+>You can read more about how to use the `Configuration` class here: [https://lcobucci-jwt.readthedocs.io/en/latest/configuration/](https://lcobucci-jwt.readthedocs.io/en/latest/configuration/)
+
 ### Protecting routes
 
 After executing the configuration steps, we can call the `auth:jwt` middleware on any route, or route group, to use this package's guard.
