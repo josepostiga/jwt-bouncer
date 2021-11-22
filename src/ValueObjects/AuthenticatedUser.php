@@ -22,7 +22,7 @@ class AuthenticatedUser implements Authenticatable
 
     public function getAuthIdentifier()
     {
-        return $this->token->getClaim($this->getAuthIdentifierName());
+        return $this->token->claims()->get($this->getAuthIdentifierName());
     }
 
     public function getAuthPassword(): ?string
@@ -47,6 +47,6 @@ class AuthenticatedUser implements Authenticatable
 
     public function __get($claim)
     {
-        return $this->token->getClaim($claim);
+        return $this->token->claims()->get($claim);
     }
 }
