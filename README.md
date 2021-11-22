@@ -37,6 +37,59 @@ If we're using Laravel, we can publish the configuration file for the package by
 
 If we're using Lumen, then things get a little more tricky. We need to add a `JWT_SCOPES` key on the `.env` file, where we defined all the scopes we accept separated by a comma. We also need to add the auth configuration file load call in the `bootstrap/app.php` file, by adding `$app->configure('auth')` on the configuration files load section, there.
 
+### AuthServiceProvider.php
+Ensure to bind your public/secret key, for example:
+```php
+<?php
+
+namespace App\Providers;
+
+use Illuminate\Support\ServiceProvider;
+use Lcobucci\JWT\Configuration;
+use Lcobucci\JWT\Signer\Rsa\Sha256;
+use Lcobucci\JWT\Signer\Key\InMemory;
+
+class AuthServiceProvider extends ServiceProvider
+{
+    /**
+     * Register any application services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        //
+    }
+
+    /**
+     * Boot the authentication services for the application.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        $jwtSecret = InMemory::plainText(
+            $this->app['config']->get('auth.jwt.secret.key', '[local-do-not-use]'),
+            $this->app['config']->get('auth.jwt.secret.passphrase', '[local-passphrase-do-not-use]'),
+        );
+
+        $jwtPublic = InMemory::plainText(
+            $this->app['config']->get('auth.jwt.public.key', '[local-do-not-use]')
+        );
+
+        $this->app->bind(Configuration::class, function () use ($jwtSecret, $jwtPublic){
+            return Configuration::forAsymmetricSigner(
+                new Sha256,
+                $jwtSecret,
+                $jwtPublic
+            );
+        });
+    }
+
+}
+
+```
+
 ### Protecting routes
 
 After executing the configuration steps, we can call the `auth:jwt` middleware on any route, or route group, to use this package's guard.
