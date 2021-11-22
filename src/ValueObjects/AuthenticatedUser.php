@@ -8,7 +8,7 @@ use Lcobucci\JWT\Token;
 
 class AuthenticatedUser implements Authenticatable
 {
-    private Token $token;
+    protected Token $token;
 
     public function __construct(Token $token)
     {
