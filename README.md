@@ -68,16 +68,15 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $jwtSecret = InMemory::plainText(
-            $this->app['config']->get('auth.jwt.secret.key', '[local-do-not-use]'),
-            $this->app['config']->get('auth.jwt.secret.passphrase', '[local-passphrase-do-not-use]'),
-        );
+       $this->app->bind(Configuration::class, function () {
+            $jwtSecret = InMemory::file(
+                base_path('private_key.pem'),
+                env('JWT_PRIVATE_PASSPHRASE', '1234')
+            );
 
-        $jwtPublic = InMemory::plainText(
-            $this->app['config']->get('auth.jwt.public.key', '[local-do-not-use]')
-        );
-
-        $this->app->bind(Configuration::class, function () use ($jwtSecret, $jwtPublic){
+            $jwtPublic = InMemory::file(
+                base_path('public_key.pem')
+            );
             return Configuration::forAsymmetricSigner(
                 new Sha256,
                 $jwtSecret,
