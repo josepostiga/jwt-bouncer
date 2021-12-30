@@ -5,7 +5,7 @@ namespace JosePostiga\JwtBouncer;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\ServiceProvider;
 use JosePostiga\JwtBouncer\Guards\JwtGuard;
-use Lcobucci\JWT\Parser;
+use Lcobucci\JWT\Configuration;
 
 class JwtBouncerServiceProvider extends ServiceProvider
 {
@@ -30,8 +30,10 @@ class JwtBouncerServiceProvider extends ServiceProvider
         $this->app['auth']->extend(
             $config->get('jwt-bouncer.guards.jwt.driver'),
             static function (Container $app, $name, array $config) {
+                /** @var Configuration $config */
+                $config = $app->make(Configuration::class);
                 try {
-                    $jwt = (new Parser())->parse($app['request']->bearerToken());
+                    $jwt = $config->parser()->parse($app['request']->bearerToken());
                 } catch (\Exception $exception) {
                     $jwt = null;
                 }

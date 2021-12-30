@@ -37,6 +37,60 @@ If we're using Laravel, we can publish the configuration file for the package by
 
 If we're using Lumen, then things get a little more tricky. We need to add a `JWT_SCOPES` key on the `.env` file, where we defined all the scopes we accept separated by a comma. We also need to add the auth configuration file load call in the `bootstrap/app.php` file, by adding `$app->configure('auth')` on the configuration files load section, there.
 
+### AuthServiceProvider.php
+Ensure to bind your public/secret key, for example:
+```php
+<?php
+
+namespace App\Providers;
+
+use Illuminate\Support\ServiceProvider;
+use Lcobucci\JWT\Configuration;
+use Lcobucci\JWT\Signer\Rsa\Sha256;
+use Lcobucci\JWT\Signer\Key\InMemory;
+
+class AuthServiceProvider extends ServiceProvider
+{
+    /**
+     * Register any application services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        //
+    }
+
+    /**
+     * Boot the authentication services for the application.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+       $this->app->bind(Configuration::class, function () {
+            $jwtSecret = InMemory::file(
+                base_path('private_key.pem'),
+                env('JWT_PRIVATE_PASSPHRASE', '1234')
+            );
+
+            $jwtPublic = InMemory::file(
+                base_path('public_key.pem')
+            );
+            return Configuration::forAsymmetricSigner(
+                new Sha256,
+                $jwtSecret,
+                $jwtPublic
+            );
+        });
+    }
+
+}
+
+```
+
+>You can read more about how to use the `Configuration` class here: [https://lcobucci-jwt.readthedocs.io/en/latest/configuration/](https://lcobucci-jwt.readthedocs.io/en/latest/configuration/)
+
 ### Protecting routes
 
 After executing the configuration steps, we can call the `auth:jwt` middleware on any route, or route group, to use this package's guard.

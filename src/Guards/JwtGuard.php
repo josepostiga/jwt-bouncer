@@ -42,8 +42,8 @@ class JwtGuard implements Guard
 
     private function jwtContainsCorrectScopes(): bool
     {
-        return $this->jwt->hasClaim('scopes')
-            && collect($this->jwt->getClaim('scopes'))
+        return $this->jwt->claims()->has('scopes')
+            && collect($this->jwt->claims()->get('scopes'))
                 ->filter(fn ($scope) => in_array($scope, $this->scopes, true))
                 ->isNotEmpty();
     }
